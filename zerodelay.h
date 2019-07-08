@@ -1,5 +1,9 @@
+#ifndef ZERODELAY_H_INCLUDED
+#define ZERODELAY_H_INCLUDED
+
 #ifndef F_CPU
 #define F_CPU 16000000
+#endif // F_CPU
 /** PRESCALER MASK CONFIG TABLE:
  * CS12|CS11|CS10
  *      0|0|0 = 0x00    No Clock
@@ -11,26 +15,27 @@
  *      1|1|0 = 0x06    Ext. src. T1, falling edge
  *      1|1|1 = 0x07    Ext. src. T1, rising edge
 */
-#define  TIMER1_PRESCALER_MSK   0x03
-#ifdef   TIMER1_PRESCALER_MSK==0x00
-#define  TIMER1_PRESCALER_FACTOR 0
-#elifdef TIMER1_PRESCALER_MSK==0x01
+
+#define TIMER1_PRESCALER_MSK 3
+#if   TIMER1_PRESCALER_MSK == 1
 #define  TIMER1_PRESCALER_FACTOR 1
-#elifdef TIMER1_PRESCALER_MSK==0x02
+#elif TIMER1_PRESCALER_MSK == 2
 #define  TIMER1_PRESCALER_FACTOR 8
-#elifdef TIMER1_PRESCALER_MSK==0x03
+#elif TIMER1_PRESCALER_MSK == 3
 #define  TIMER1_PRESCALER_FACTOR 64
-#elifdef TIMER1_PRESCALER_MSK==0x04
+#elif TIMER1_PRESCALER_MSK == 4
 #define  TIMER1_PRESCALER_FACTOR 256
-#elifdef TIMER1_PRESCALER_MSK==0x05
+#elif TIMER1_PRESCALER_MSK == 5
 #define  TIMER1_PRESCALER_FACTOR 1024
 #else
 #define  TIMER1_PRESCALER_FACTOR 1
 #endif // TIMER1_PRESCALER_MSK
 
-volatile const int8_t baseTimeMSec = 10; 
+volatile const int8_t baseTimeMSec = 10;
 
 void timer1_init(int8_t baseTimeMSec);
 void baseTimeAccUpdade();
 int64_t wait(int64_t waitTimeMSec);
-bool isTime(int64_t targetBaseTime);
+int8_t isTime(int64_t targetBaseTime);
+
+#endif // ZERODELAY_H_INCLUDED
